@@ -473,7 +473,10 @@
           De <span class="old-price">$47</span> por solo <span class="new-price">$19.90</span>
         </p>
 
-        <!-- Botão CTA Principal -->
+        <!-- Widget MundPay 1-Click Upsell -->
+        <div data-mndpay-render="01a0b625-e80c-70a0-a63b-4fd43a049af2"></div>
+
+        <!-- Botão CTA Principal (Fallback) -->
         <a 
           href="https://pay.mycheckoutt.com/01a06972-8e51-7275-86a8-37844d7ccc52?ref=" 
           class="btn-cta" 
@@ -589,6 +592,26 @@
           }
         }
       }, true);
+    })();
+
+    // Suporte inteligente MundPay: oculta o fallback se o botão oficial 1-click for renderizado
+    (function handleMundPayRender() {
+      const target = document.querySelector('[data-mndpay-render]');
+      const fallbackBtn = document.getElementById('btnUpsellAccept');
+      if (!target || !fallbackBtn) return;
+      if (target.children.length > 0) {
+        fallbackBtn.style.display = 'none';
+        const hint = document.querySelector('.cta-hint');
+        if (hint) hint.style.display = 'none';
+      }
+      const observer = new MutationObserver(function() {
+        if (target.children.length > 0) {
+          fallbackBtn.style.display = 'none';
+          const hint = document.querySelector('.cta-hint');
+          if (hint) hint.style.display = 'none';
+        }
+      });
+      observer.observe(target, { childList: true, subtree: true });
     })();
   </script>
 
